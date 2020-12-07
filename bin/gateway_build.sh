@@ -96,9 +96,9 @@ fi
 
 if [ -z $apigateway_image ] 
 then
-	sh gateway_setup.sh  --stage build --apigateway_server_port $apigateway_server_port --apigateway_ui_port $apigateway_ui_port --apigateway_es_port $apigateway_es_port
+	./gateway_setup.sh  --stage build --apigateway_server_port $apigateway_server_port --apigateway_ui_port $apigateway_ui_port --apigateway_es_port $apigateway_es_port
 else 
-	sh gateway_setup.sh  --stage build --apigateway_image $apigateway_image --apigateway_server_port $apigateway_server_port --apigateway_ui_port $apigateway_ui_port --apigateway_es_port $apigateway_es_port
+	./gateway_setup.sh  --stage build --apigateway_image $apigateway_image --apigateway_server_port $apigateway_server_port --apigateway_ui_port $apigateway_ui_port --apigateway_es_port $apigateway_es_port
 fi
 
 echo "Checking the API Gateway is up" 
