@@ -1,17 +1,16 @@
 {
-  "id": "f313be5f-2640-22f7-36b6-3e79bbadc9e2",
-  "name": "QAEnviroment",
+  "name": "StageEnviroment",
   "values": [
     {
       "enabled": true,
       "key": "url",
-      "value": "http://dp2.germanywestcentral.cloudapp.azure.com:5558",
+      "value": "http://dp2.germanywestcentral.cloudapp.azure.com:5555",
       "type": "text"
     },
 	{
       "enabled": true,
       "key": "httpInvokeUrl",
-      "value": "http://dp2.germanywestcentral.cloudapp.azure.com:5558",
+      "value": "http://dp2.germanywestcentral.cloudapp.azure.com:5555",
       "type": "text"
     },
     {
