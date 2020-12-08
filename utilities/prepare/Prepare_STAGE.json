@@ -1,0 +1,223 @@
+{
+	"info": {
+		"_postman_id": "ed0cdf77-6377-4ee2-9b21-26a1f2262ecc",
+		"name": "Prepare_STAGE",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get all Applications",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "49e018a4-0c0a-4e41-aa32-3f5afbfe31c3",
+						"exec": [
+							"let apiResponse=JSON.parse(responseBody);\r",
+							"let applications = apiResponse.applications;\r",
+							"if (applications === null || applications.length === 0) {\r",
+							"    postman.setNextRequest(null);\r",
+							"} else {\r",
+							"    let applicationsToBeDeleted = applications.filter(function(application, index, arr){ \r",
+							"        return !application.name.endsWith(\"_STAGE\");\r",
+							"    });\r",
+							"    if (applicationsToBeDeleted.length === 0) {\r",
+							"        postman.setNextRequest(null);\r",
+							"    } else {\r",
+							"        pm.environment.set(\"applicationId\", applicationsToBeDeleted[0].id);\r",
+							"    }\r",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{httpInvokeUrl}}/rest/apigateway/applications",
+					"host": [
+						"{{httpInvokeUrl}}"
+					],
+					"path": [
+						"rest",
+						"apigateway",
+						"applications"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "This status code indicates that either user didn't provide right credentials or user doesn't have required privileges to access this API.",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/applications",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"applications"
+							]
+						}
+					},
+					"status": "Unauthorized",
+					"code": 401,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "text/plain"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				},
+				{
+					"name": "This status code indicates that a list of the available applications is retrieved successfully.",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/applications",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"applications"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "\"{\\n    \\\"applications\\\": [\\n        {\\n            \\\"name\\\": \\\"TestSampleApp\\\",\\n            \\\"description\\\": null,\\n            \\\"contactEmails\\\": [],\\n            \\\"identifiers\\\": [\\n                {\\n                    \\\"id\\\": \\\"3ce6f4df-e773-4fdb-bed3-3d63b5cb520c\\\",\\n                    \\\"name\\\": \\\"Username\\\",\\n                    \\\"key\\\": \\\"httpBasicAuth\\\",\\n                    \\\"value\\\": [\\n                        \\\"Administrator\\\"\\n                    ]\\n                }\\n            ],\\n            \\\"siteURLs\\\": [],\\n            \\\"jsOrigins\\\": [],\\n            \\\"authStrategyIds\\\": [\\n                \\\"81df9682-6a28-4ebc-92fd-2c486d3f75c2\\\"\\n            ],\\n            \\\"version\\\": \\\"1.0\\\",\\n            \\\"id\\\": \\\"803b7f16-45c6-4b1c-be26-4da053d40640\\\",\\n            \\\"created\\\": \\\"2018-12-04 05:27:56 GMT\\\",\\n            \\\"lastupdated\\\": null,\\n            \\\"owner\\\": \\\"Administrator\\\",\\n            \\\"consumingAPIs\\\": [],\\n            \\\"accessTokens\\\": {\\n                \\\"apiAccessKey_credentials\\\": {\\n                    \\\"apiAccessKey\\\": \\\"f293cbb5cb0f1367ecc55b4c5b1717dad4073f77d2bde869cf8ee0162cc08f38\\\",\\n                    \\\"expirationInterval\\\": null,\\n                    \\\"expirationDate\\\": null,\\n                    \\\"expired\\\": false\\n                },\\n                \\\"oauth_credentials\\\": {\\n                    \\\"clientID\\\": null,\\n                    \\\"clientSecret\\\": null,\\n                    \\\"clientName\\\": null,\\n                    \\\"scopes\\\": null,\\n                    \\\"token_lifetime\\\": null,\\n                    \\\"token_refresh_limit\\\": null,\\n                    \\\"redirect_uris\\\": [],\\n                    \\\"Type\\\": \\\"confidential\\\"\\n                }\\n            }\\n        ,\\r\\n\\t\\t\\t\\\"teams\\\": [\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"id\\\": \\\"Administrators\\\",\\r\\n\\t\\t\\t\\t\\t\\\"name\\\": \\\"Administrators\\\",\\r\\n\\t\\t\\t\\t\\t\\\"canDelete\\\": \\\"false\\\"\\r\\n\\t\\t\\t\\t},\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"id\\\": \\\"Default\\\",\\r\\n\\t\\t\\t\\t\\t\\\"name\\\": \\\"Default\\\",\\r\\n\\t\\t\\t\\t\\t\\\"canDelete\\\": \\\"true\\\"\\r\\n\\t\\t\\t\\t}\\r\\n\\t\\t\\t]    }\\n    ]\\n}\""
+				}
+			]
+		},
+		{
+			"name": "Delete one Application",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "49e018a4-0c0a-4e41-aa32-3f5afbfe31c3",
+						"exec": [
+							"postman.setNextRequest(\"Get all Applications\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{httpInvokeUrl}}/rest/apigateway/applications/{{applicationId}}",
+					"host": [
+						"{{httpInvokeUrl}}"
+					],
+					"path": [
+						"rest",
+						"apigateway",
+						"applications",
+						"{{applicationId}}"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "This status code indicates that either user didn't provide right credentials or user doesn't have required privileges to access this API.",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/applications",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"applications"
+							]
+						}
+					},
+					"status": "Unauthorized",
+					"code": 401,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "text/plain"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				},
+				{
+					"name": "This status code indicates that a list of the available applications is retrieved successfully.",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/applications",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"applications"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "\"{\\n    \\\"applications\\\": [\\n        {\\n            \\\"name\\\": \\\"TestSampleApp\\\",\\n            \\\"description\\\": null,\\n            \\\"contactEmails\\\": [],\\n            \\\"identifiers\\\": [\\n                {\\n                    \\\"id\\\": \\\"3ce6f4df-e773-4fdb-bed3-3d63b5cb520c\\\",\\n                    \\\"name\\\": \\\"Username\\\",\\n                    \\\"key\\\": \\\"httpBasicAuth\\\",\\n                    \\\"value\\\": [\\n                        \\\"Administrator\\\"\\n                    ]\\n                }\\n            ],\\n            \\\"siteURLs\\\": [],\\n            \\\"jsOrigins\\\": [],\\n            \\\"authStrategyIds\\\": [\\n                \\\"81df9682-6a28-4ebc-92fd-2c486d3f75c2\\\"\\n            ],\\n            \\\"version\\\": \\\"1.0\\\",\\n            \\\"id\\\": \\\"803b7f16-45c6-4b1c-be26-4da053d40640\\\",\\n            \\\"created\\\": \\\"2018-12-04 05:27:56 GMT\\\",\\n            \\\"lastupdated\\\": null,\\n            \\\"owner\\\": \\\"Administrator\\\",\\n            \\\"consumingAPIs\\\": [],\\n            \\\"accessTokens\\\": {\\n                \\\"apiAccessKey_credentials\\\": {\\n                    \\\"apiAccessKey\\\": \\\"f293cbb5cb0f1367ecc55b4c5b1717dad4073f77d2bde869cf8ee0162cc08f38\\\",\\n                    \\\"expirationInterval\\\": null,\\n                    \\\"expirationDate\\\": null,\\n                    \\\"expired\\\": false\\n                },\\n                \\\"oauth_credentials\\\": {\\n                    \\\"clientID\\\": null,\\n                    \\\"clientSecret\\\": null,\\n                    \\\"clientName\\\": null,\\n                    \\\"scopes\\\": null,\\n                    \\\"token_lifetime\\\": null,\\n                    \\\"token_refresh_limit\\\": null,\\n                    \\\"redirect_uris\\\": [],\\n                    \\\"Type\\\": \\\"confidential\\\"\\n                }\\n            }\\n        ,\\r\\n\\t\\t\\t\\\"teams\\\": [\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"id\\\": \\\"Administrators\\\",\\r\\n\\t\\t\\t\\t\\t\\\"name\\\": \\\"Administrators\\\",\\r\\n\\t\\t\\t\\t\\t\\\"canDelete\\\": \\\"false\\\"\\r\\n\\t\\t\\t\\t},\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"id\\\": \\\"Default\\\",\\r\\n\\t\\t\\t\\t\\t\\\"name\\\": \\\"Default\\\",\\r\\n\\t\\t\\t\\t\\t\\\"canDelete\\\": \\\"true\\\"\\r\\n\\t\\t\\t\\t}\\r\\n\\t\\t\\t]    }\\n    ]\\n}\""
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "basic",
+		"basic": [
+			{
+				"key": "password",
+				"value": "manage",
+				"type": "string"
+			},
+			{
+				"key": "username",
+				"value": "Administrator",
+				"type": "string"
+			}
+		]
+	},
+	"protocolProfileBehavior": {}
+}
