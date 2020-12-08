@@ -71,6 +71,30 @@ import_api() {
 	cd $BIN_DIR
 }
 ##############################################################################
+## Import an API to the API Gateway Server.
+## Usage: import_api_STAGE <api_project> <url> <username> <password>
+##############################################################################
+import_api_STAGE() {
+
+	api_project=$1
+	url=$2
+	username=$3
+	password=$4
+	BIN_DIR="$PWD"
+	CURR_DIR="../"
+	API_DIR=$CURR_DIR/apis_STAGE/$api_project
+	
+	if [ -d "$API_DIR" ] 
+	then
+		cd $API_DIR && zip -r $CURR_DIR/$api_project.zip ./*
+		curl -sS -i -X POST $url/rest/apigateway/archive?overwrite=* -H "Content-Type:application/zip" -H"Accept:application/json" --data-binary @"$CURR_DIR/$api_project.zip" -u $username:$password > /dev/null
+		rm $CURR_DIR/$api_project.zip
+	else
+		echo "The API with name $api does not exist as a flat file."
+	fi
+	cd $BIN_DIR
+}
+##############################################################################
 ## Import Configurations to the API Gateway Server.
 ## Usage: import_configurations <configuration_name> <url> <username> <password>
 ##############################################################################
@@ -139,8 +163,8 @@ export_api_STAGE() {
 	fi
 }
 ##############################################################################
-## Export an API from the API Gateway Server.
-## Usage: export_api <api_project> <url> <username> <password>
+## Export Configurations from the API Gateway Server.
+## Usage: export_configurations <api_project> <url> <username> <password>
 ##############################################################################
 export_configurations() {
 	configuration_name=$1
