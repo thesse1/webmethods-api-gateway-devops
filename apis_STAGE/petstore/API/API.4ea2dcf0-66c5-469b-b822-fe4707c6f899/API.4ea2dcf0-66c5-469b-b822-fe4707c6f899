@@ -1422,18 +1422,18 @@
   },
   "nativeEndpoint" : [ {
     "passSecurityHeaders" : true,
-    "uri" : "http://petstore.swagger.io/v2",
+    "uri" : "https://petstore.swagger.io/v2",
     "connectionTimeoutDuration" : 0,
     "alias" : false
   }, {
     "passSecurityHeaders" : true,
-    "uri" : "https://petstore.swagger.io/v2",
+    "uri" : "http://petstore.swagger.io/v2",
     "connectionTimeoutDuration" : 0,
     "alias" : false
   } ],
   "apiName" : "SwaggerPetstore",
   "apiVersion" : "1.0.5",
-  "apiDescription" : "This is a sample server Petstore server.  You can find out more about Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/).  For this sample, you can use the api key `special-key` to test the authorization filters. TOUCH2.",
+  "apiDescription" : "TOUCH 3. This is a sample server Petstore server.  You can find out more about Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/).  For this sample, you can use the api key `special-key` to test the authorization filters.",
   "maturityState" : "Beta",
   "isActive" : true,
   "type" : "REST",
@@ -1445,7 +1445,7 @@
   "scopes" : [ ],
   "publishedPortals" : [ ],
   "creationDate" : "2020-04-08 16:06:04 GMT",
-  "lastModified" : "2020-12-08 12:18:04 GMT",
+  "lastModified" : "2020-12-08 13:38:04 GMT",
   "systemVersion" : 1,
   "mockService" : {
     "enableMock" : true
