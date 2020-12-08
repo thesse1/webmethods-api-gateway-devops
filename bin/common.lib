@@ -131,9 +131,9 @@ export_api_STAGE() {
 	
 	if [ -d "$API_DIR" ] 
 	then
-	curl -s $url/rest/apigateway/archive -d @"$API_DIR/export_payload.json" --output $CURR_DIR/$api_project.zip -u $username:$password -H "x-HTTP-Method-Override:GET" -H "Content-Type:application/json"
-	unzip -o $CURR_DIR/$api_project.zip -d $API_DIR/
-	rm $CURR_DIR/$api_project.zip
+	curl -s $url/rest/apigateway/archive -d @"$API_DIR/export_payload.json" --output $api_project.zip -u $username:$password -H "x-HTTP-Method-Override:GET" -H "Content-Type:application/json"
+	unzip -o $api_project.zip -d $API_DIR/
+	rm $api_project.zip
 	else
 	echo "The API with name $api does not exists in the flat file."
 	fi
