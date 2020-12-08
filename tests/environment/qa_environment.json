@@ -5,13 +5,13 @@
     {
       "enabled": true,
       "key": "url",
-      "value": "http://localhost:5555",
+      "value": "http://dp2.germanywestcentral.cloudapp.azure.com:5555",
       "type": "text"
     },
 	{
       "enabled": true,
       "key": "httpInvokeUrl",
-      "value": "http://localhost:5555",
+      "value": "http://dp2.germanywestcentral.cloudapp.azure.com:5555",
       "type": "text"
     },
     {
