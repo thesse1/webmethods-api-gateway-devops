@@ -58,6 +58,32 @@ stages:
             pathToPublish: '$(System.DefaultWorkingDirectory)/tests/Results/performanceReport.xml'
             artifactName: performanceReport
            condition: always()
+ - stage: "PrepareAndBuildAndDeployStage"
+   jobs:
+     - job : "PrepareAndBuildAndDeployAPIsToStageAPIGateway"
+       steps:
+         - script: 'sudo npm install -g newman'
+           workingDirectory: '$(System.DefaultWorkingDirectory)'
+           displayName: 'Prerequisite'
+##         - script: 'newman run utilities/prepare/Prepare_STAGE.json  --reporters cli -e tests/environment/qa_environment.json'
+##           workingDirectory: '$(System.DefaultWorkingDirectory)'
+##           displayName: 'Delete all non-STAGE applications'      
+##         - script: 'newman run utilities/export/ExportAPI.json  --reporters cli --env-var file_Loc=$(Build.BuildId).zip -e tests/environment/qa_environment.json'
+##           workingDirectory: '$(System.DefaultWorkingDirectory)'
+##           displayName: 'Import the Deployable To API Gateway'      
+         - task: ArchiveFiles@2
+           inputs:
+            rootFolderOrFile: '$(System.DefaultWorkingDirectory)/apis_STAGE/${{Parameters.apiProject}}'
+            includeRootFolder: false
+            archiveType: 'zip'
+            archiveFile: '$(System.DefaultWorkingDirectory)/$(Build.BuildId).zip'
+            replaceExistingArchive: true
+            verbose: true
+           displayName: 'Create the API Deployable from the flat representation'
+         - script: 'newman run utilities/import/ImportAPI.json  --reporters cli --env-var file_Loc=$(Build.BuildId).zip -e tests/environment/stage_environment.json'
+           workingDirectory: '$(System.DefaultWorkingDirectory)'
+           displayName: 'Import the Deployable To API Gateway'      
+         - publish :  '$(System.DefaultWorkingDirectory)/$(Build.BuildId).zip'
  - stage: "Report"
    condition: always()
    jobs:
