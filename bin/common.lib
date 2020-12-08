@@ -118,6 +118,28 @@ export_api() {
 }
 ##############################################################################
 ## Export an API from the API Gateway Server.
+## Usage: export_api_STAGE <api_project> <url> <username> <password>
+##############################################################################
+export_api_STAGE() {
+	api_project=$1
+	url=$2
+	username=$3
+	password=$4
+	BIN_DIR="$PWD"
+	CURR_DIR="../"
+	API_DIR=$CURR_DIR/apis_STAGE/$api_project
+	
+	if [ -d "$API_DIR" ] 
+	then
+	curl -s $url/rest/apigateway/archive -d @"$API_DIR/export_payload.json" --output $CURR_DIR/$api_project.zip -u $username:$password -H "x-HTTP-Method-Override:GET" -H "Content-Type:application/json"
+	unzip -o $CURR_DIR/$api_project.zip -d $API_DIR/
+	rm $CURR_DIR/$api_project.zip
+	else
+	echo "The API with name $api does not exists in the flat file."
+	fi
+}
+##############################################################################
+## Export an API from the API Gateway Server.
 ## Usage: export_api <api_project> <url> <username> <password>
 ##############################################################################
 export_configurations() {

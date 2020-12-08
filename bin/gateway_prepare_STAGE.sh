@@ -140,6 +140,13 @@ fi
 echo "Removing non-STAGE applications"
 run_test ../utilities/prepare/Prepare_STAGE.json ../tests/environment/build_environment.json "httpInvokeUrl=http://localhost:$apigateway_server_port"
 
+echo "Exporting to apis_STAGE"
+for file in ../apis_STAGE/*; do
+	if [ -d "$file" ]; then
+		export_api_STAGE $file http://localhost:$apigateway_server_port "Administrator" "manage"
+	fi
+done
+
 cd $PWD
 }
 
