@@ -113,15 +113,15 @@ stages:
             testResultsFiles: '$(System.DefaultWorkingDirectory)/performanceReport/*.xml'
             testRunTitle: 'QA environment test failures'
             publishRunAttachments: false
- - stage: "Rollout"
-   dependsOn: Test
-   condition: in(dependencies.Test.result, 'Succeeded', 'SucceededWithIssues') 
-   jobs:
-     - job: "PromoteToProd"
-       steps:
-        - script: 'sudo npm install -g newman'
-          workingDirectory: '$(System.DefaultWorkingDirectory)'
-          displayName: 'Prerequisite'
-        - script: 'newman run utilities/promotion/PromotionManagement.json  --reporters cli -g tests/environment/qa_environment.json -e $(System.DefaultWorkingDirectory)/apis/${{Parameters.apiProject}}/promotion_payload.json --env-var buildNumber=$(Build.BuildId)'
-          workingDirectory: '$(System.DefaultWorkingDirectory)'
-          displayName: 'Promotion'
+## - stage: "Rollout"
+##   dependsOn: Test
+##   condition: in(dependencies.Test.result, 'Succeeded', 'SucceededWithIssues') 
+##   jobs:
+##     - job: "PromoteToProd"
+##       steps:
+##        - script: 'sudo npm install -g newman'
+##          workingDirectory: '$(System.DefaultWorkingDirectory)'
+##          displayName: 'Prerequisite'
+##        - script: 'newman run utilities/promotion/PromotionManagement.json  --reporters cli -g tests/environment/qa_environment.json -e $(System.DefaultWorkingDirectory)/apis/${{Parameters.apiProject}}/promotion_payload.json --env-var buildNumber=$(Build.BuildId)'
+##          workingDirectory: '$(System.DefaultWorkingDirectory)'
+##          displayName: 'Promotion'
