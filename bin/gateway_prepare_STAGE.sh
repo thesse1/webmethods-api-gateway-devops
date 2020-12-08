@@ -125,14 +125,14 @@ fi
 if [ -z "$test_suite" ] 
 then
 	echo "Not running the tests"
-elif
+else
 	echo "Running tests for API gateway"
 	if [ "$test_suite" = "*" ] 
 	then 
 		for file in ../tests/test-suites/*; do
 			run_test $file ../tests/environment/build_environment.json "httpInvokeUrl=http://localhost:$apigateway_server_port"
 		done
-	elif
+	else
 		run_test $test_suite ../tests/environment/build_environment.json "httpInvokeUrl=http://localhost:$apigateway_server_port"
 	fi
 fi
