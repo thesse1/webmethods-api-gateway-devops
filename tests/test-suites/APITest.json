@@ -1,10 +1,8 @@
 {
-	"variables": [],
 	"info": {
+		"_postman_id": "1bbe5b6b-b753-468f-94c3-a904aaded9cc",
 		"name": "APITest",
-		"_postman_id": "0e1201f0-cba6-52c3-6fe5-ff5b53c85d2f",
-		"description": "",
-		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
@@ -13,32 +11,47 @@
 				{
 					"listen": "test",
 					"script": {
-						"type": "text/javascript",
+						"id": "131a4522-0a30-4a68-a35c-be99a0d635fa",
 						"exec": [
 							"tests[\"Check Status code is 200\"] = responseCode.code === 200;"
-						]
+						],
+						"type": "text/javascript"
 					}
 				}
 			],
 			"request": {
-				"url": "{{httpInvokeUrl}}/gateway/SwaggerPetstore/1.0.5/pet/123",
 				"method": "GET",
 				"header": [
 					{
 						"key": "Accept",
-						"value": "application/json",
-						"description": ""
+						"value": "application/json"
 					},
 					{
 						"key": "Connection",
-						"value": "keep-alive",
-						"description": ""
+						"value": "keep-alive"
+					},
+					{
+						"key": "x-gateway-apikey",
+						"value": "785bde12-3c1d-47ee-9617-6a1b20e51059",
+						"type": "text"
 					}
 				],
-				"body": {},
-				"description": ""
+				"url": {
+					"raw": "{{httpInvokeUrl}}/gateway/SwaggerPetstore/1.0.5/pet/123",
+					"host": [
+						"{{httpInvokeUrl}}"
+					],
+					"path": [
+						"gateway",
+						"SwaggerPetstore",
+						"1.0.5",
+						"pet",
+						"123"
+					]
+				}
 			},
 			"response": []
 		}
-	]
+	],
+	"protocolProfileBehavior": {}
 }
