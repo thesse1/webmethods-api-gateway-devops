@@ -68,7 +68,7 @@ stages:
          - script: 'newman run utilities/prepare/Prepare_STAGE.json  --reporters cli -e tests/environment/qa_environment.json'
            workingDirectory: '$(System.DefaultWorkingDirectory)'
            displayName: 'Delete all non-STAGE applications'      
-         - script: 'curl http://dp2.germanywestcentral.cloudapp.azure.com:5558/rest/apigateway/archive -d "/apis/${{Parameters.apiProject}}/export_payload.json" --output $(Build.BuildId).zip -u Administrator:manage -H "x-HTTP-Method-Override:GET" -H "Content-Type:application/json"'
+         - script: 'curl http://dp2.germanywestcentral.cloudapp.azure.com:5558/rest/apigateway/archive -d @"apis/${{Parameters.apiProject}}/export_payload.json" --output $(Build.BuildId).zip -u Administrator:manage -H "x-HTTP-Method-Override:GET" -H "Content-Type:application/json"'
            workingDirectory: '$(System.DefaultWorkingDirectory)'
            displayName: 'Export the Deployable from API Gateway'      
 ##         - task: ArchiveFiles@2
