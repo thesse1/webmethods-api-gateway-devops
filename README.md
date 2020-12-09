@@ -1,22 +1,25 @@
 # About API Gateway DevOps
 
-As each organization builds APIs using API Gateway for easy consumption and monetization, the continuous integration and delivery are integral part of the API Gateway solutions to meet the consumer demands. We need to automate the management of APIs and policies to speed up the deployment, introduce continuous integration concepts and place API artifacts under source code management. As new apps are deployed, the API definitions can change and those changes have to be propagated to other external products like API portal. This requires the API owner to update the associated documentation and in most cases this process is a tedious manual exercise. In order to address this issue, it is a key to bring in DevOps style automation to the API life cycle management process in API Gateway. With this, enterprises can deliver continuous innovation with speed and agility, ensuring that new updates and capabilities are automatically, efficiently and securely delivered to their developers and partners in a timely fashion and without manual intervention. This enables a team of API Gateway policy developers to work in parallel developing APIs and policies to be deployed as a single API Gateway configuration.
+Please note: This fork implements the original webmethods-api-gateway-devops template for a specific demo scenario with specific requirements. Some of the files in this repository have been changed/extended/added to cover the requirements of the demo scenario. This readme has been extended to cover the specific demo scenario.
+
+As each organization builds APIs using API Gateway for easy consumption and monetization, the continuous integration and delivery are integral part of the API Gateway solutions to meet the consumer demands. We need to automate the management of APIs and policies to speed up the deployment, introduce continuous integration concepts and place API artifacts under source code management. As new apps are deployed, the API definitions can change and those changes have to be propagated to other external products like API Portal. This requires the API owner to update the associated documentation and in most cases this process is a tedious manual exercise. In order to address this issue, it is a key to bring in DevOps style automation to the API life cycle management process in API Gateway. With this, enterprises can deliver continuous innovation with speed and agility, ensuring that new updates and capabilities are automatically, efficiently and securely delivered to their developers and partners in a timely fashion and without manual intervention. This enables a team of API Gateway policy developers to work in parallel developing APIs and policies to be deployed as a single API Gateway configuration.
 
 ![GitHub Logo](/images/api.png)
 
+In addition to the functionality of the original webmethods-api-gateway-devops template, this specific scenario demonstrates how to automatically adjust the API Gateway assets for the deployment on different stages. It implements the following requirements: APIs should have separate sets of applications (with different identifiers) on different stages. The correct deployment of these applications should be enforced automatically. All applications are created on the Development environment with names ending with "_DEV", "_STAGE" or "_PROD" indicating their intended usage. All applications should be exported and managed in VCS, but only the _STAGE and _PROD applications should be imported on the respective STAGE and PROD environments. This is implemented by manipulating the assets on a dedicated build environment: Initially, all assets (including all applications) are imported on the build environment. Then all applications except for _STAGE or _PROD, respectively, are automatically deleted from the build environment using the API Gateteway Appication Management API. Finally, the API project is exported again from the build environment (now only including the right applications for the target environment) and imported on the target environment.
 
 ## webMethods API Gateway assets and configurations
-The following are the  API Gateway assets and configurations that can be moved across API Gateway stages.
+The following API Gateway assets and configurations can be moved across API Gateway stages:
  - Gateway APIs 
- - Policy Definitions/Policy Templates/Global Policies 
+ - Policy Definitions/Policy Templates/Global Policies
  - Applications
  - Aliases
- - Plans 
+ - Plans
  - Packages
- - Subscriptions 
+ - Subscriptions
  - Users/Groups/ACLs/Teams
- - General Configurations like Load balancer,Extended settings
- - Security configurations 
+ - General Configurations like Load balancer, Extended settings
+ - Security configurations
  - Destination configurations
  - External accounts configurations
 
@@ -27,30 +30,33 @@ webMethods API Gateway can be deployed with many flavors.
  - Standalone API Gateway with external elastic search and Kibana.
  - Clustered API Gateway with external elastic search and Kibana.
  
- The docker compose files for these different deployment styles can be found at https://github.com/SoftwareAG/webmethods-api-gateway/tree/master/samples/docker/deploymentscripts
+The docker compose files for these different deployment styles can be found at https://github.com/SoftwareAG/webmethods-api-gateway/tree/master/samples/docker/deploymentscripts
  
  ## Devops and CI/CD in webMethods API Gateway
- The CI/CD and devops flow can be acheived in multiple ways. 
+ The CI/CD and devops flow can be achieved in multiple ways. 
  ### Using webmethods Deployer and Asset Build environment
   API Gateway asset binaries can be build using Asset Build environment and promoted across stages using WmDeployer. More information on this way of CI/CD and Devops automation can be found at http://techcommunity.softwareag.com/pwiki/-/wiki/Main/Staging%2C+Promotion+and+DevOps+of+API+Gateway+assets 
  ### Using Promotion management APIs
   The promotion APIs that are exposed by API Gateway can be used for the devops automation. More information on these APIs can be found at https://github.com/SoftwareAG/webmethods-api-gateway/blob/master/apigatewayservices/APIGatewayPromotionManagement.json
+ ### Directly using the API Gateway Archive API for exporting and importing asset definitions
+  This approach is followed in this scenario.
 
 # About this repository
 
-This repository provides assets/scripts for users to setup an CI/CD for API Gateway assets. Please note, the assets/scripts/methods provided in this repository explains one of the ways of setting up the CI/CD and not the only way. The samples provided are mainly to explain the capabilities and not be used as-is. One can clone this repository, then modify it to suite their organizational needs - for example, have different number of environments, different type of deployment (Kubernetes based) etc.
+This repository provides assets/scripts for users to setup a CI/CD for API Gateway assets. Please note, the assets/scripts/methods provided in this repository explain one of the ways of setting up the CI/CD and not the only way. The samples provided are mainly to explain the capabilities and not be used as-is. One can clone this repository, then modify it to suite their organizational needs - for example, have different number of environments, different type of deployment (Kubernetes based) etc.
 
-The samples in this repository use the API Gateway Promotion APIs for automation of the Devops flow.
+The samples in this repository use the API Gateway Archive API for automation of the Devops flow.
 
 The repository has the following folders
 
-  - apis : Contains the API Gateway assets of the organization 
+  - apis : Contains the API Gateway assets of the organization.
+  - apis_STAGE : Contains the API Gateway assets for deployment on the STAGE environment.
   - configuration : Contains staged specfic API Gateway Administration configurations.
   - deployment-descriptor : Contains staged specific docker compose files to create API Gateway environments.
-  - tests : Contains the Postman Test suites and Environmental variables required for the test suites.
-  - utilities : Contains the Postman collections for Import/Export, Promotion management.
-  - bin : Library scripts that are used to create API Gateway environments, Develop assets and test them.
-  - pipelines : Contains some sample Jenkins and the Azure pipelines as an insight for organizations. 
+  - tests : Contains the Postman Test suites and Environmental variables required for the test suites and the Postman utility collections.
+  - utilities : Contains the Postman collections for import, promotion management (not used in the demo scenario) and preparation for STAGE environment.
+  - bin : Library scripts that are used to create API Gateway environments, export, import and test assets and prepare them for the STAGE environment.
+  - pipelines : Contains some sample Jenkins (not used in the demo scenario) and the Azure pipelines as an insight for organizations. 
   
 # Devops CI/CD usecases
 
@@ -68,8 +74,7 @@ The deployment-descriptors are available to create following environments,
 More examples with different flavors of deployment can be found at  
 https://github.com/SoftwareAG/webmethods-api-gateway/tree/master/samples/docker/deploymentscripts. 
 
-
-### gateway-setup.sh
+## gateway-setup.sh
 The gateway-setup.sh under /bin uses these deployment descriptors and create the environments.
 
 | Parameter | Description |
@@ -98,13 +103,13 @@ One can clone this repository and add their staging environments under /deployme
 
 # Develop APIs and test using API Gateway
 
-The most common usecase for an API Developer is to develop APIs in their local dev environments and then export them to flat file representation such that they can be  integrated to any VCS. Also Developers need to import their APIs from an VCS i.e flat file representation to their local dev environments for further updates.
+The most common usecase for an API Developer is to develop APIs in their local dev environments and then export them to flat file representation such that they can be integrated to any VCS. Also Developers need to import their APIs from an VCS i.e flat file representation to their local dev environments for further updates.
 
 The gateway_import_export_utils.sh under /bin can be used for this. Using this script the developers can import/export APIs from their local Dev API Gateway to their VCS local repo and vice versa.
 
 ## gateway_import_export_utils.sh
 
-The gateway_import_export_utils.sh can be used for developers import and export APIs(projects)  as a flat file representation of the VCS.
+The gateway_import_export_utils.sh can be used for developers import and export APIs (projects) as a flat file representation of the VCS. The export_payload.json file in each project folder under /apis defines which API Gateway assets belong to this project. The assets will be imported/exported into/from their respective project folders under /apis.
 
 | Parameter | README |
 | ------ | ------ |
@@ -118,20 +123,19 @@ The gateway_import_export_utils.sh can be used for developers import and export 
 Sample Usage for importing the API petstore that is present as flat file under apis/petstore into API Gateway server at http://localhost:5555 
 
 ```sh
- $ gateway_import_export_utils.sh  --import --api_name petstore --apigateway_url http://localhost:5556
+ $ gateway_import_export_utils.sh  --import --api_name petstore --apigateway_url http://localhost:5555
 ```
 Sample Usage for exporting the API petstore that is present in the  API Gateway server at http://localhost:5555  as flat file under apis/petstore
 
 ```sh
- $ gateway_import_export_utils.sh  --export --api_name petstore --apigateway_url http://localhost:5556
+ $ gateway_import_export_utils.sh  --export --api_name petstore --apigateway_url http://localhost:5555
 ```
 
 ## gateway_build.sh 
-The next common scenario for an API developer is to assert the changes made to the APIs does not break their customer scenarios.To enable this a build script gateway_build.sh under /bin can be used.
+The next common scenario for an API developer is to assert the changes made to the APIs do not break their customer scenarios. To enable this, a build script gateway_build.sh under /bin can be used.
 
-This gateway_build.sh creates an single node Docker based API Gateway environment using the deployment descriptor under /deployment-descriptors/build/ and will import all the  APIs under the folder /apis and then run all the  tests suites under /tests against the build environment created.
+This gateway_build.sh creates an single node Docker-based API Gateway environment using the deployment descriptor under /deployment-descriptors/build/ and will import all the APIs under the folder /apis and then run all the  tests suites under /tests against the build environment created.
 
-# Parameters
 | Parameter | Description |
 | ------ | ------ |
 | apigateway_image | The DTR for API Gateway image. |
@@ -142,7 +146,7 @@ This gateway_build.sh creates an single node Docker based API Gateway environmen
 | test_suite |  The postman collection test_suite to run. Default will not run any test.To run all tests pass *|
 | skip_import | To skip the import of APIs |
 
-Sample usage to run all tests by creating an build environment
+Sample usage to run all tests by creating a build environment
 ``` sh 
 gateway_build.sh --apigateway_image mycompany_apigateway_image:latest --apigateway_server_port 5558 --apigateway_ui_port 9075  --apigateway_es_port 9243 --test_suite \*
 ```
@@ -150,6 +154,54 @@ gateway_build.sh --apigateway_image mycompany_apigateway_image:latest --apigatew
 Sample usage to run only a subset of tests
 ``` sh 
 gateway_build.sh --apigateway_server_port 5558 --test_suite ../tests/test-suites/APITest.json
+```
+
+## gateway_prepare_STAGE.sh
+
+This script also creates a Docker-based API Gateway build environment, imports all APIs and runs the configured tests just like gateway_build.sh. In addition to that, it manipulates the assets on the build environment (after running the tests) as defined in the Prepare_STAGE.json Postman collection in /utilities/prepare. In our demo scenario, the Postman collection will remove all applications with names not ending with "_STAGE". Then the script exports all APIs into the /apis_STAGE folder for all API projects configured there. From there, the assets can be imported into the STAGE environment using the gateway_import_export_utils_STAGE.sh.
+
+| Parameter | Description |
+| ------ | ------ |
+| apigateway_image | The DTR for API Gateway image. |
+| apigateway_server_port | API Gateway server port.Default is 5555 |
+| apigateway_ui_port | API Gateway UI port.Default is 9072 |
+| apigateway_es_port |  API Gateway Elastic search port.Default is 9240 |
+| create_new | Create new API Gateway container even if an  existing container is running by killing it.Default is false | 
+| test_suite |  The postman collection test_suite to run. Default will not run any test.To run all tests pass *|
+| skip_import | To skip the import of APIs |
+
+Sample usage to run all tests by creating a build environment
+``` sh 
+gateway_prepare_STAGE.sh --apigateway_image mycompany_apigateway_image:latest --apigateway_server_port 5558 --apigateway_ui_port 9075  --apigateway_es_port 9243 --test_suite \*
+```
+
+Sample usage to run only a subset of tests
+``` sh 
+gateway_prepare_STAGE.sh --apigateway_server_port 5558 --test_suite ../tests/test-suites/APITest.json
+```
+
+## gateway_import_export_utils_STAGE.sh
+
+The gateway_import_export_utils_STAGE.sh can be used for developers import and export APIs (projects) as a flat file representation of the VCS. The export_payload.json file in each project folder under /apis_STAGE defines which API Gateway assets belong to this project. The assets will be imported/exported into/from their respective project folders under /apis_STAGE.
+
+| Parameter | README |
+| ------ | ------ |
+| import(or)export |  To import or export from the flat file. |
+| api_name | The API project to import.|
+| apigateway_url |  APIGateway url to import or export from.Default is http://localhost:5555.|
+| apigateway_es_port | API Gateway Elastic search port.Default is 9240|
+| username |  The APIGateway username.Default is Administrator.|
+| password | The APIGateway password.Default is password.|
+
+Sample Usage for importing the API petstore that is present as flat file under apis_STAGE/petstore into API Gateway server at http://localhost:5555 
+
+```sh
+ $ gateway_import_export_utils_STAGE.sh  --import --api_name petstore --apigateway_url http://localhost:5555
+```
+Sample Usage for exporting the API petstore that is present in the API Gateway server at http://localhost:5555 as flat file under apis_STAGE/petstore
+
+```sh
+ $ gateway_import_export_utils_STAGE.sh  --export --api_name petstore --apigateway_url http://localhost:5555
 ```
 
 # Pipelines
