@@ -1433,7 +1433,7 @@
   } ],
   "apiName" : "SwaggerPetstore",
   "apiVersion" : "1.0.5",
-  "apiDescription" : "TOUCH 5. This is a sample server Petstore server.  You can find out more about Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/).  For this sample, you can use the api key `special-key` to test the authorization filters.",
+  "apiDescription" : "This is a sample server Petstore server.  You can find out more about Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/).  For this sample, you can use the api key `special-key` to test the authorization filters.",
   "maturityState" : "Beta",
   "isActive" : true,
   "type" : "REST",
@@ -1445,7 +1445,7 @@
   "scopes" : [ ],
   "publishedPortals" : [ ],
   "creationDate" : "2020-04-08 16:06:04 GMT",
-  "lastModified" : "2020-12-08 14:19:45 GMT",
+  "lastModified" : "2020-12-10 07:55:40 GMT",
   "systemVersion" : 1,
   "mockService" : {
     "enableMock" : true
