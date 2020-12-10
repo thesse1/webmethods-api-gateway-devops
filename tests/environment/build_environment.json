@@ -2,10 +2,22 @@
   "id": "f313be5f-2640-22f7-36b6-3e79bba3c9e2",
   "name": "BuildEnviroment",
   "values": [
+    {
+      "enabled": true,
+      "key": "url",
+      "value": "http://dp2.germanywestcentral.cloudapp.azure.com:5558",
+      "type": "text"
+    },
 	{
       "enabled": true,
       "key": "httpInvokeUrl",
-      "value": "http://localhost:5555",
+      "value": "http://dp2.germanywestcentral.cloudapp.azure.com:5558",
+      "type": "text"
+    },
+    {
+      "enabled": true,
+      "key": "auth",
+      "value": "Basic QWRtaW5pc3RyYXRvcjptYW5hZ2U= ",
       "type": "text"
     }
   ],

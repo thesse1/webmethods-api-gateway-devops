@@ -5,25 +5,19 @@
     {
       "enabled": true,
       "key": "url",
-      "value": "http://dp2.germanywestcentral.cloudapp.azure.com:5558",
+      "value": "http://dp2.germanywestcentral.cloudapp.azure.com:5555",
       "type": "text"
     },
 	{
       "enabled": true,
       "key": "httpInvokeUrl",
-      "value": "http://dp2.germanywestcentral.cloudapp.azure.com:5558",
+      "value": "http://dp2.germanywestcentral.cloudapp.azure.com:5555",
       "type": "text"
     },
     {
       "enabled": true,
       "key": "auth",
       "value": "Basic QWRtaW5pc3RyYXRvcjptYW5hZ2U= ",
-      "type": "text"
-    },
-	{
-      "enabled": true,
-      "key": "higherStageKey",
-      "value": "e310942b-c96d-4f7c-aa0a-00e81efdc8b5",
       "type": "text"
     }
   ],

@@ -26,7 +26,7 @@ stages:
             replaceExistingArchive: true
             verbose: true
            displayName: 'Create the API Deployable from the flat representation'
-         - script: 'newman run utilities/import/ImportAPI.json  --reporters cli --env-var file_Loc=$(Build.BuildId).zip -e tests/environment/qa_environment.json'
+         - script: 'newman run utilities/import/ImportAPI.json  --reporters cli --env-var file_Loc=$(Build.BuildId).zip -e tests/environment/build_environment.json'
            workingDirectory: '$(System.DefaultWorkingDirectory)'
            displayName: 'Import the Deployable To API Gateway'      
          - publish :  '$(System.DefaultWorkingDirectory)/$(Build.BuildId).zip'
@@ -37,7 +37,7 @@ stages:
         - script: 'sudo npm install -g newman'
           workingDirectory: '$(System.DefaultWorkingDirectory)'
           displayName: 'Prerequisite'
-        - script: 'newman run test-suites/APITest.json  --reporters cli,junit --reporter-junit-export Results/junitReport.xml -e environment/qa_environment.json'
+        - script: 'newman run test-suites/APITest.json  --reporters cli,junit --reporter-junit-export Results/junitReport.xml -e environment/build_environment.json'
           workingDirectory: '$(System.DefaultWorkingDirectory)/tests'
           displayName: 'Run tests on the QA Machine'
         - task: PublishBuildArtifacts@1
@@ -50,7 +50,7 @@ stages:
          - script: 'sudo npm install -g newman'
            workingDirectory: '$(System.DefaultWorkingDirectory)'
            displayName: 'Prerequisite'
-         - script: 'newman run test-suites/PerformanceTest.json  --reporters cli,junit --reporter-junit-export Results/performanceReport.xml -e environment/qa_environment.json -n 20'
+         - script: 'newman run test-suites/PerformanceTest.json  --reporters cli,junit --reporter-junit-export Results/performanceReport.xml -e environment/build_environment.json -n 20'
            workingDirectory: '$(System.DefaultWorkingDirectory)/tests'
            displayName: 'Run tests on the QA Machine'
          - task: PublishBuildArtifacts@1
@@ -65,7 +65,7 @@ stages:
          - script: 'sudo npm install -g newman'
            workingDirectory: '$(System.DefaultWorkingDirectory)'
            displayName: 'Prerequisite'
-         - script: 'newman run utilities/prepare/Prepare_STAGE.json  --reporters cli -e tests/environment/qa_environment.json'
+         - script: 'newman run utilities/prepare/Prepare_STAGE.json  --reporters cli -e tests/environment/build_environment.json'
            workingDirectory: '$(System.DefaultWorkingDirectory)'
            displayName: 'Delete all non-STAGE applications'      
          - script: 'curl http://dp2.germanywestcentral.cloudapp.azure.com:5558/rest/apigateway/archive -d @"apis/${{Parameters.apiProject}}/export_payload.json" --output $(Build.BuildId).zip -u Administrator:manage -H "x-HTTP-Method-Override:GET" -H "Content-Type:application/json"'
@@ -80,7 +80,7 @@ stages:
 ##            replaceExistingArchive: true
 ##            verbose: true
 ##           displayName: 'Create the API Deployable from the flat representation'
-         - script: 'newman run utilities/import/ImportAPI.json  --reporters cli --env-var file_Loc=$(Build.BuildId).zip -e tests/environment/stage_environment.json'
+         - script: 'newman run utilities/import/ImportAPI.json  --reporters cli --env-var file_Loc=$(Build.BuildId).zip -e tests/environment/qa_environment.json'
            workingDirectory: '$(System.DefaultWorkingDirectory)'
            displayName: 'Import the Deployable To API Gateway'      
          - publish :  '$(System.DefaultWorkingDirectory)/$(Build.BuildId).zip'
