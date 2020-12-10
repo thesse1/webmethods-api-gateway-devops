@@ -1,7 +1,7 @@
 {
   "applicationID" : "b5a89c36-58a7-4ff6-8f1f-62c8de8c354e",
   "name" : "MySwaggerPetstoreApp_PROD",
-  "description" : "TOUCH6.",
+  "description" : "This application should be used on PROD environment",
   "owner" : "Administrator",
   "identifiers" : [ ],
   "contactEmails" : [ ],
@@ -11,8 +11,8 @@
     }
   },
   "creationDate" : "2020-12-08 09:47:21 GMT",
-  "lastModified" : "2020-12-08 19:52:24 GMT",
-  "lastUpdated" : 1607457144417,
+  "lastModified" : "2020-12-10 07:54:11 GMT",
+  "lastUpdated" : 1607586851450,
   "siteURLs" : [ ],
   "jsOrigins" : [ ],
   "version" : "1.0",
