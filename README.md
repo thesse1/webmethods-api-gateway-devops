@@ -6,7 +6,7 @@ As each organization builds APIs using API Gateway for easy consumption and mone
 
 ![GitHub Logo](/images/api.png)
 
-In addition to the functionality of the original webmethods-api-gateway-devops template, this specific scenario demonstrates how to automatically adjust the API Gateway assets for the deployment on different stages. It implements the following requirements: APIs should have separate sets of applications (with different identifiers) on different stages. The correct deployment of these applications should be enforced automatically. All applications are created on the Development environment with names ending with "_DEV", "_STAGE" or "_PROD" indicating their intended usage. All applications should be exported and managed in VCS, but only the _STAGE and _PROD applications should be imported on the respective STAGE and PROD environments. This is implemented by manipulating the assets on a dedicated build environment: Initially, all assets (including all applications) are imported on the build environment. Then all applications except for _STAGE or _PROD, respectively, are automatically deleted from the build environment using the API Gateteway Appication Management API. Finally, the API project is exported again from the build environment (now only including the right applications for the target environment) and imported on the target environment.
+In addition to the functionality of the original webmethods-api-gateway-devops template, this specific scenario demonstrates how to automatically adjust the API Gateway assets for the deployment on different stages. It implements the following requirements: APIs should have separate sets of applications (with different identifiers) on different stages. The correct deployment of these applications should be enforced automatically. All applications are created on the Development environment with names ending with "_DEV", "_STAGE" or "_PROD" indicating their intended usage. All applications should be exported and managed in VCS, but only the _STAGE and _PROD applications should be imported on the respective STAGE and PROD environments. This is implemented by manipulating the assets on a dedicated BUILD environment: Initially, all assets (including all applications) are imported on the BUILD environment. Then all applications except for _STAGE or _PROD, respectively, are automatically deleted from the BUILD environment using the API Gateteway Appication Management API. Finally, the API project is exported again from the BUILD environment (now only including the right applications for the target environment) and imported on the target environment.
 
 ## webMethods API Gateway assets and configurations
 The following API Gateway assets and configurations can be moved across API Gateway stages:
@@ -220,6 +220,8 @@ A sample CI/CD flow starting from a API Developer to propage the change to Prod 
 
 For the demo scenario, the Azure pipeline has been adjusted to cover the automatic removal of non-STAGE applications for the deployment on the STAGE environment. The promotion to PROD environment has been disabled in the demo scenario.
 
+![GitHub Logo](/images/devopsFlow_demoScenario.png)
+
 Let's consider this example
  - An API developer  wants to make a change to the petstore API. All of the apis of the organization are available in VCS whose local repo is present under the /apis folder. This flat file representation of the API should be converted and imported into the developer's local development API Gateway enviroment for changes to be made.
   For this the user uses the /bin/gateway_import_export_utils.sh to do this and import this API to the mydev.apigateway:5556.
@@ -232,7 +234,7 @@ Let's consider this example
   ```sh 
    /bin/gateway_build.sh --apigateway_image mycompany_apigateway_image:latest --apigateway_server_port 5558 --apigateway_ui_port 9075  --apigateway_es_port 9243 --test_suite \*
   ```
-  This would create a docker instance of API Gateway and run all the tests.This sample repository contains a simple set of Regression tests for the petstore API.These are located under /tests folder.
+  This would create a docker instance of API Gateway and run all the tests. This sample repository contains a simple set of Regression tests for the petstore API. These are located under /tests folder.
   
   - Now this change made by the API developer has to be pushed back to the VCS system such that this propogates to the next stage.i.e Convert(export) the API in the development environment to the local repository /apis. This can be done by executing the following command
   ```sh 
@@ -254,9 +256,9 @@ https://docs.microsoft.com/en-us/azure/devops/service-hooks/services/webhooks?vi
    
  - For the demo scenario, the Azure pipeline has been adjusted to perform the following tasks.
    - Checkout from the VCS system all the apis.
-   - Build and test them on Build environment.
+   - Build and test them on BUILD environment.
    - Prepare assets for deployment on STAGE environment (using the Prepare_STAGE.json Postman collection), i.e., remove all non-STAGE applications.
-   - Export assets from Build environment and import on STAGE environment.
+   - Export assets from BUILD environment and import on STAGE environment.
    - The Rollout step is deactivated in the demo scenario.
    
    These pipelines get executed as a result of the webhook that takes care of validating the APIs and on succesful test results doing a promotion of the APIs to higher stages.
