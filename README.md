@@ -118,7 +118,7 @@ The gateway_import_export_utils.sh can be used for developers import and export 
 | apigateway_url |  APIGateway url to import or export from.Default is http://localhost:5555.|
 | apigateway_es_port | API Gateway Elastic search port.Default is 9240|
 | username |  The APIGateway username.Default is Administrator.|
-| password | The APIGateway password.Default is password.|
+| password | The APIGateway password.Default is manage.|
 
 Sample Usage for importing the API petstore that is present as flat file under apis/petstore into API Gateway server at http://localhost:5555 
 
@@ -191,7 +191,7 @@ The gateway_import_export_utils_STAGE.sh can be used for developers import and e
 | apigateway_url |  APIGateway url to import or export from.Default is http://localhost:5555.|
 | apigateway_es_port | API Gateway Elastic search port.Default is 9240|
 | username |  The APIGateway username.Default is Administrator.|
-| password | The APIGateway password.Default is password.|
+| password | The APIGateway password.Default is manage.|
 
 Sample Usage for importing the API petstore that is present as flat file under apis_STAGE/petstore into API Gateway server at http://localhost:5555 
 
@@ -207,25 +207,27 @@ Sample Usage for exporting the API petstore that is present in the API Gateway s
 # Pipelines
 The key to proper devops is continuous integration and continuous deployment. Organizations use standard tools such as Jenkins and Azure to design their integration and assuring continous delivery.
 
-This repository contains a sample Jenkins and Azure pipline that can be used by an organization for continuous integration & deployment of their APIs from developing them to delivering them to their consumers.These pipelines depict how an API(project) that is present in VCS can be promoted to across different API Gateway environments.
+This repository contains a sample Jenkins and Azure pipline that can be used by an organization for continuous integration & deployment of their APIs from developing them to delivering them to their consumers. These pipelines depict how an API (project) that is present in VCS can be promoted to across different API Gateway environments. The Azure pipeline has adjusted in this repository for the specific demo scenario.
 
 References
 -  Jenkins Pipelines https://www.jenkins.io/doc/book/pipeline/
 -  Azure pipelines https://azure.microsoft.com/en-in/services/devops/pipelines/
 
 # Example
-A sample CI/CD flow starting from a API Developer to propage the change to Prod depicted in the below image
+A sample CI/CD flow starting from a API Developer to propage the change to Prod depicted in the below image. This flow is implemented by the Jenkins pipeline and the original Azure pipeline in the original Software AG webmethods-api-gateway-devops template.
 
 ![GitHub Logo](/images/devopsFlow.png)
 
-Lets consider this example
+For the demo scenario, the Azure pipeline has been adjusted to cover the automatic removal of non-STAGE applications for the deployment on the STAGE environment. The promotion to PROD environment has been disabled in the demo scenario.
+
+Let's consider this example
  - An API developer  wants to make a change to the petstore API. All of the apis of the organization are available in VCS whose local repo is present under the /apis folder. This flat file representation of the API should be converted and imported into the developer's local development API Gateway enviroment for changes to be made.
   For this the user uses the /bin/gateway_import_export_utils.sh to do this and import this API to the mydev.apigateway:5556.
   ```sh 
    /bin/gateway_import_export_utils.sh  --import --api_name petstore --apigateway_url http://mydev.apigateway:5556
   ```
   - The API Developer makes the necessary changes to the petstore API. 
-  - The API developer needs to ensure that the change that were made does not cause regressions. For this, the user needs to run the set of function/regression tests over his change before hand the change gets propagated to the next stage. 
+  - The API developer needs to ensure that the change that was made does not cause regressions. For this, the user needs to run the set of function/regression tests over his change before the change gets propagated to the next stage. 
   To run the set of tests in the developer instance he can use the /bin/gateway_build.sh
   ```sh 
    /bin/gateway_build.sh --apigateway_image mycompany_apigateway_image:latest --apigateway_server_port 5558 --apigateway_ui_port 9075  --apigateway_es_port 9243 --test_suite \*
@@ -238,21 +240,28 @@ Lets consider this example
   ```
 > Note : In case the API developer needs to create an API from scratch that is not availabe already , then he skips the first step.
   
-  - After this is done the changes from the Developers local repo is commited to the VCS. 
+  - After this is done the changes from the Developers local repo are commited to the VCS. 
   
-  -  Continuous integration and automation is usually acheived with the help of CI/CD tools like Jenkins/Azure pipelines.
+  -  Continuous integration and automation is usually achieved with the help of CI/CD tools like Jenkins/Azure pipelines.
 One can configure webhooks over their VCS systems that can get triggered when an change is commited to the repository.
 Please refer to https://plugins.jenkins.io/generic-webhook-trigger/ for configuring webhooks over Jenkins and 
 https://docs.microsoft.com/en-us/azure/devops/service-hooks/services/webhooks?view=azure-devops for Azure pipelines.
 
  - The sample piplines given in this repository are present under /pipelines that do the following.
    - Checkout from the VCS system all the apis.
-   - Build and test them
+   - Build and test them on QA environment.
    - Rollout to the higher stage that is done by executing the Promotion mangement APIs of API Gateway.
+   
+ - For the demo scenario, the Azure pipeline has been adjusted to perform the following tasks.
+   - Checkout from the VCS system all the apis.
+   - Build and test them on Build environment.
+   - Prepare assets for deployment on STAGE environment (using the Prepare_STAGE.json Postman collection), i.e., remove all non-STAGE applications.
+   - Export assets from Build environment and import on STAGE environment.
+   - The Rollout step is deactivated in the demo scenario.
    
    These pipelines get executed as a result of the webhook that takes care of validating the APIs and on succesful test results doing a promotion of the APIs to higher stages.
    
-   > Note : The jenkins pipline uses the jenkins.properties file that contains an variable 'api_project' to promote specific API alone to the next stage. In Azure this is acheived by an inline parameter 'apiProject'
+   > Note : The jenkins pipline uses the jenkins.properties file that contains an variable 'api_project' to promote specific API alone to the next stage. In Azure this is achieved by an inline parameter 'apiProject'
    
    ## Environment based configurations
    One other most common scenario for a staged API Gateway environment is different configuration values for different stages. This repository contains this staged configurations under the folder '/configurations'. The samples configurations are
